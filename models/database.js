@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
-
-const uri = `mongodb+srv://bot:PASSWORDHERE@cluster0.1ipw1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const fetch = require('node-fetch');
+const uri = `mongodb+srv://bot:passwordhere@cluster0.1ipw1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 
 class Database {
@@ -33,6 +33,46 @@ class Database {
         return collection.find().toArray();
     }
 
+    async checkArticleId() { // Return the current articleid stored in the database.
+        const collection = await this.connectDb('dataFromApi');
+        const dataArray = await collection.find().toArray();
+        const articleid = dataArray[0].articleid;
+        return articleid;
+    }
+
+    async updateArticleId(id) { // Set the new articleid in database.
+        const collection = await this.connectDb('dataFromApi');
+        const currentArticleId = await this.checkArticleId();
+
+        await collection.findOneAndUpdate({ articleid: currentArticleId }, { $set: { articleid: id } }).then(r => {
+            console.log(`✅ new articleid updated ! (${id})\n`);
+        })
+    }
+
+    async checkIfNewArticle() {  // Fetch articles & check if there is a new one, if yes return the data (true) else return false.
+        const data = await fetch('https://api.spaceflightnewsapi.net/v3/articles').then(r => r.json());
+        const articleId = data[0].id;
+        const currentArticleId = await this.checkArticleId();
+
+        if (currentArticleId === articleId) { console.log('❌ there is no new article.\n'); return false };
+        if (currentArticleId != articleId) {
+
+            await this.updateArticleId(articleId);
+            return data[0]; //return data (true) or false.
+        }
+    }
+
+    async storeArticleInDb() { // If there's a new article, push it in the database.
+        const newarticle = await this.checkIfNewArticle();
+        if (newarticle) {
+            // push article in DB
+            console.log("pushing the article...");
+        }
+    }
+
+
 }
+
+
 
 module.exports = { Database };
