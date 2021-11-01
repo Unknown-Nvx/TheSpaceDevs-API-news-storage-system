@@ -1,6 +1,6 @@
 const database = require('./models/database');
 const db = new database.Database();
 
-setInterval(() => {
+setInterval(() => { // two minutes loop
     db.storeArticleInDb();
-}, 60000)
+}, 120000)

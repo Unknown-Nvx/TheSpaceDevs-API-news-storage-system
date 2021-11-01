@@ -1,16 +1,17 @@
 const { MongoClient } = require('mongodb');
 const fetch = require('node-fetch');
-const uri = `mongodb+srv://bot:passwordhere@cluster0.1ipw1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
+const uri = `mongodb+srv://bot:${process.env.DB_PASSWORD}@cluster0.1ipw1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 
 class Database {
 
     async connectDb(collec = "news") {
         const connection = await client.connect();
-        return connection.db("SpaceNews").collection(collec);  // Connect to MongoDb Atlas and retrieve a collection;
+        return connection.db("SpaceNews").collection(collec);  // Connect to MongoDb Atlas and retrieve a collection.
     }
 
-    async createDocument(articleid, title, url, imageUrl, newsSite, publishedAt, summary, updatedAt, featured) {
+    async createDocument(articleid, title, url, imageUrl, newsSite, publishedAt, summary, updatedAt, featured) {  // Insert a new document in the collection.
         const collection = await this.connectDb();
         collection.insertOne({ articleid: articleid, title: title, url: url, imageUrl: imageUrl, newsSite: newsSite, publishedAt: publishedAt, summary: summary, updatedAt: updatedAt, featured: featured }).then(r => {
             console.log(`article ${articleid} has been successfully inserted !`);
@@ -19,7 +20,7 @@ class Database {
         })
     }
 
-    async removeDocument(articleid) {
+    async removeDocument(articleid) {  // Remove one specific document from the collection. 
         const collection = await this.connectDb();
         collection.deleteOne({ articleid: articleid }).then(r => {
             console.log(`article ${articleid} has been successfully deleted !`);
@@ -28,7 +29,7 @@ class Database {
         })
     }
 
-    async documents() {
+    async documents() {  // Return all the collection data.
         const collection = await this.connectDb();
         return collection.find().toArray();
     }
@@ -40,7 +41,7 @@ class Database {
         return articleid;
     }
 
-    async updateArticleId(id) { // Set the new articleid in database.
+    async updateArticleId(id) { // Set the new articleid in the database.
         const collection = await this.connectDb('dataFromApi');
         const currentArticleId = await this.checkArticleId();
 
@@ -62,11 +63,12 @@ class Database {
         }
     }
 
-    async storeArticleInDb() { // If there's a new article, push it in the database.
+    async storeArticleInDb() { // If there's a new article, push it in the database. (###-MAIN FUNCTION-###)
         const newarticle = await this.checkIfNewArticle();
         if (newarticle) {
-            // push article in DB
-            console.log("pushing the article...");
+            this.createDocument(newarticle.id, newarticle.title, newarticle.url, newarticle.imageUrl, newarticle.newsSite, newarticle.summary, newarticle.publishedAt, newarticle.updatedAt, newarticle.featured).then(r => { // push the article in DB
+                console.log(r);
+            })
         }
     }
 
