@@ -1,5 +1,3 @@
-# recent-space-news
+# TheSpaceDevsAPI SpaceNews storage system
 
- Insert the latest space news into a database (mongodb document). 
- \
- *[powered by the space devs API](https://thespacedevs.com/)*
+ A system to fetch data (Space News Article) from The  [TheSpaceDevs](https://thespacedevs.com/) and store them in a mongoDB collection
