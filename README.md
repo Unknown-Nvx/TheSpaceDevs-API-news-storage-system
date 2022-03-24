@@ -1,3 +1,3 @@
 # TheSpaceDevsAPI SpaceNews storage system
 
- A system to fetch data (Space News Article) from The  [TheSpaceDevs](https://thespacedevs.com/) and store them in a mongoDB collection
+ A system to fetch Space News Article from [TheSpaceDevs](https://thespacedevs.com/) API, and store them in a mongoDB collection.
