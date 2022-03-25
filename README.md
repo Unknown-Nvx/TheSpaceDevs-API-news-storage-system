@@ -2,4 +2,4 @@
 
  A system to fetch Space News Article from [TheSpaceDevs](https://thespacedevs.com/) API, and store them in a mongoDB collection.
  
-`(authorized by the API devs)`
+`authorized by TheSpaceDevs developers and considered a good practice`
