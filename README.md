@@ -1,5 +1,3 @@
-# TheSpaceDevsAPI SpaceNews storage system
+## TheSpaceDevs API Space News database storage
 
- A system to fetch Space News Article from [TheSpaceDevs](https://thespacedevs.com/) API, and store them in a mongoDB collection.
- 
-`authorized by TheSpaceDevs developers and considered a good practice`
+fetch Space News Article from [TheSpaceDevs](https://thespacedevs.com/) API, and store them in a mongoDB collection.
